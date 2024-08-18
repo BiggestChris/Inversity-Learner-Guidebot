@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}
+    Homepage
+{% endblock %}
+{% block content %}
+    
+    <h1>Search a Director</h1>
+
+    <form action="/" method="post" enctype="multipart/form-data">
+
+        <div class="container mt-3 mb-3">
+            <div class="input-group mb-3">
+                <span class="input-group-text"><b>Director name: </b></span>
+                <input class="form-control" type="text" id="director-name" name="director-name">
+            </div>
+            <input class="btn btn-primary" type="submit" value="Search">
+        </div>
+
+    </form>
+
+    
+
+{% endblock %}

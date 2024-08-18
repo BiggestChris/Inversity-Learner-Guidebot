@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+{% block title %}
+    Search Results
+{% endblock %}
+{% block content %}
+    <h1>Search Results for {{ director_name }}</h1>
+    <p>Disclaimer: This App is a work-in-progress and there may be incorrect information, limitations with the API,
+         and different officers may be grouped under the same category if they share properties. Please ensure to 
+         manually verify information directly on Companies House.
+         No responsibility is taken for incorrect information given by the app.
+    </p>
+
+    {% if sorted_officers %}
+        {% for dob, officers in sorted_officers.items() %}
+        <hr class="bg-dark edged-less">
+        <div class="edged">
+            <h2>Date of Birth: {{ dob }}</h2>
+
+            <!-- List all officers with this date of birth -->
+            <table class="table table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Birth month</th>
+                        <th>Officer ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for officer in officers %}
+                        <tr>
+                            <td><a href="https://find-and-update.company-information.service.gov.uk{{ officer['links']['self'] | default('N/A') }}"
+                                target="_blank">
+                                {{ officer['title'] }}</a>
+                            </td>
+                            <td>
+                                <!--
+                                {{ (officer['address']['care_of'] + ',') if officer['address']['care_of'] else '' }}
+                                {{ (officer['address']['premises'] + ',') if officer['address']['premises'] else '' }}
+                                {{ (officer['address']['address_line_1'] + ',') if officer['address']['address_line_1'] else '' }}
+                                {{ (officer['address']['address_line_2'] + ',') if officer['address']['address_line_2'] else '' }}
+                                {{ (officer['address']['locality'] + ',') if officer['address']['locality'] else '' }}
+                                {{ (officer['address']['region'] + ',') if officer['address']['region'] else '' }}
+                                {{ (officer['address']['postal code'] + ',') if officer['address']['postal code'] else '' }}
+                                {{ (officer['address']['country'] + ',') if officer['address']['country'] else '' }}
+                                -->
+
+                                {% set address_fields = [
+                                    officer['address']['care_of'],
+                                    officer['address']['premises'],
+                                    officer['address']['address_line_1'],
+                                    officer['address']['address_line_2'],
+                                    officer['address']['locality'],
+                                    officer['address']['region'],
+                                    officer['address']['postal code'],
+                                    officer['address']['country']
+                                ] %}
+                                
+                                {{ address_fields | select | join(', ') }}
+                                
+
+                            </td>
+                            <td>{{ dob | default('N/A') }}</td>
+                            <td>{{ officer['links']['self'][10:37] | default('N/A') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Collect and list all companies for these officers -->
+            <!-- <h4>Associated Companies</h4> -->
+            {% set has_companies = false %}
+            <table class="table table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Company Number</th>
+                        <th>Company Status</th>
+                        <th>Incorporation Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for officer in officers %}
+                        {% for company in officer['companies'] %}
+                            {% set has_companies = true %}
+                            <tr>
+                                <td><a href="https://find-and-update.company-information.service.gov.uk/company/{{ company['company_number'] }}"
+                                    target="_blank">
+                                    {{ company['company_name'] }}</a>
+                                </td>
+                                <td>{{ company['company_number'] }}</td>
+                                <td>{{ company['company_status'] }}</td>
+                                <td>{{ company['date_of_creation'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!--
+            {% if not has_companies %}
+                <p>No associated companies found for these officers.</p>
+            {% endif %}
+            -->
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+{% endblock %}
