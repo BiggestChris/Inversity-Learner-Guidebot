@@ -1,20 +1,12 @@
 {% extends "layout.html" %}
 {% block title %}
-    Homepage
+    GitHub Repo
 {% endblock %}
 {% block content %}
-    
-    <h1>Welcome</h1>
 
-    <p>This is the Inversity Guidebot. Here you can upload your GitHub repo, upload your Pitch, and review your results so far.
-        Remember, you need to score 25+ marks to get your Momentum badge and that's what this Guidebot is designed to help you with.
-        It won't mark your submission for you, it's only a guide to point out what makes a worthy submission, the benchmark will be
-        lower than you think!
-    </p>
-
-    <h1>Upload a File</h1>
+    <h1>Upload a GitHub Repo</h1>
     <form method="POST" action="/upload" enctype="multipart/form-data">
-        <input type="file" name="file">
+        <input type="text" name="file">
         <input type="submit" value="Upload">
     </form>
 

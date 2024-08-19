@@ -9,6 +9,32 @@ load_dotenv()
 # Access the API key from the environment
 COMPANIES_HOUSE_API_KEY = os.getenv('COMPANIES_HOUSE_API_KEY')
 
+# Function to fetch GitHub from a link
+def get_github_file(repo, path, branch="main"):
+    url = f"https://api.github.com/repos/{repo}/contents/{path}?ref={branch}"
+    headers = {"Accept": "application/vnd.github.v3.raw"}
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        return response.text
+    else:
+        print(f"Failed to fetch the file: {response.status_code}")
+        return None
+
+# Example usage:
+repo = "username/repository"
+path = "README.md"
+file_content = get_github_file(repo, path)
+
+if file_content:
+    # Pass file_content to ChatGPT
+    pass
+
+
+
+
+
+
 # Function to search for a director in Companies House
 def search_director(director_name):
     base_url = 'https://api.company-information.service.gov.uk'

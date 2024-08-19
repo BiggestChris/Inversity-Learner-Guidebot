@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, url_for, redirect, session
+from flask import Flask, render_template, request, url_for, redirect, session, flash
 import re, os
-import csv
 from functions import search_director, get_director_details, get_company_details
-import json
 from itertools import groupby
 from operator import itemgetter
 import calendar
+from werkzeug.utils import secure_filename  # Import secure_filename
 from flask_session import Session
 
 app = Flask(__name__)
@@ -15,67 +14,94 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# For uploading
+app.config['UPLOAD_FOLDER'] = 'uploads/'  # Define where to store uploaded files
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Limit the maximum file size to 16MB
+app.secret_key = 'your_secret_key'  # Required for flash messages
+
+# Ensure the upload folder exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+
+'''
+1. Need an index main page with links
+- Search for a GitHub repo
+- Search for a YouTube vid
+- Check results
+2. Search for a GitHub repo page
+- Enter a GitHub link
+- 'Upload'
+    - Need to read the link (reject if not a GitHub repo)
+    - Go to the GitHub repo with API
+    - Write all the files to a message
+    - Store the message / give straight to ChatGPT
+    - Write ChatGPT response to a variable
+3. Search for a YouTube vid
+- Enter a YouTube link
+- 'Upload'
+    - Need to read the link (reject if not a YouTube link)
+    - Convert video to file format and pass to ChatGPT (not sure if possible)
+    - Store the conversion / give straight to ChatGPT
+    - Write ChatGPT response to a variable
+4. Check results
+- Display combined ChatGPT response so far
+'''
+
+
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    """
-    session['director_name']    # Declare director name being searched as a global variable
-    session['officers']
-    session['officers_with_companies']
-    """
+    if request.method == 'GET':
 
-    # director_details = []
-    # company_details = []
-
-    if request.method == 'POST':
-        session['director_name'] = request.form.get("director-name")
-        search_results = search_director(session['director_name'])
-        session['officers'] = search_results['items'] if search_results and 'items' in search_results else []
-        session['officers_with_companies'] = []
-
-        for officer in session['officers']:
-            officer_id = officer['links']['self'].split('/')[2]
-            director_details = get_director_details(officer_id)
-            if director_details and 'items' in director_details:
-                companies = []
-                for appointment in director_details['items']:
-                    company_number = appointment['appointed_to']['company_number']
-                    company_detail = get_company_details(company_number)
-                    if company_detail:
-                        companies.append(company_detail)
-                officer['companies'] = companies
-                session['officers_with_companies'].append(officer)
-
-        return redirect("/results")
-
-    else:
         return render_template("index.html")
-
-
-@app.route("/results", methods=['GET'])
-def results_page():
-    # global results
     
-    sorted_officers = {}
-    unknown = []
+@app.route("/git", methods=['GET', 'POST'])
+def index():
+    if request.method == 'GET':
 
-    for officer in session['officers_with_companies']:
-        try:
-            DoB = str(calendar.month_name[officer['date_of_birth']['month']][0:3]) + "-" + str(officer['date_of_birth']['year'])
+        return render_template("git.html")
+    
+@app.route("/pitch", methods=['GET', 'POST'])
+def index():
+    if request.method == 'GET':
 
-            # print(DoB)
-            if DoB in sorted_officers:
-                sorted_officers[DoB].append(officer)
-            else:
-                sorted_officers[DoB] = []
-                sorted_officers[DoB].append(officer)
-        except KeyError:
-                unknown.append(officer)
+        return render_template("pitch.html")
+    
+@app.route("/results", methods=['GET', 'POST'])
+def index():
+    if request.method == 'GET':
 
-    sorted_officers["Unknown"] = unknown
-    print("Search ran successfully", flush=True)
+        return render_template("results.html")
 
-    return render_template("results.html", director_name=session['director_name'], sorted_officers=sorted_officers)
+
+
+
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    # Check if the post request has the file part
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+
+    file = request.files['file']
+
+    # If the user does not select a file, the browser submits an empty file
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+
+    if file:
+        # Secure the filename
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        flash('File successfully uploaded')
+        return redirect(url_for('index'))
+
+@app.route('/upload-false', methods=['POST'])
+def upload_file_false():
+    flash('This function is not built yet')
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":
