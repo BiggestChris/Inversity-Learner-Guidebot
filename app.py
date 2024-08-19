@@ -56,19 +56,29 @@ def index():
         return render_template("index.html")
     
 @app.route("/git", methods=['GET', 'POST'])
-def index():
-    if request.method == 'GET':
+def git():
+    if request.method == 'POST':
+        session['git_link'] = request.form.get("file")
+        print(session['git_link'])
+        return render_template("git.html")
+
+    else:
 
         return render_template("git.html")
     
 @app.route("/pitch", methods=['GET', 'POST'])
-def index():
-    if request.method == 'GET':
+def pitch():
+    if request.method == 'POST':
+        session['pitch_link'] = request.form.get("file")
+        print(session['pitch_link'])
+        return render_template("pitch.html")
+
+    else:
 
         return render_template("pitch.html")
     
 @app.route("/results", methods=['GET', 'POST'])
-def index():
+def results():
     if request.method == 'GET':
 
         return render_template("results.html")
@@ -76,7 +86,7 @@ def index():
 
 
 
-
+"""
 @app.route('/upload', methods=['POST'])
 def upload_file():
     # Check if the post request has the file part
@@ -102,6 +112,7 @@ def upload_file():
 def upload_file_false():
     flash('This function is not built yet')
     return redirect(url_for('index'))
+"""
 
 
 if __name__ == "__main__":

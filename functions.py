@@ -6,29 +6,30 @@ from requests.auth import HTTPBasicAuth
 # Load environment variables from .env file
 load_dotenv()
 
-# Access the API key from the environment
-COMPANIES_HOUSE_API_KEY = os.getenv('COMPANIES_HOUSE_API_KEY')
 
-# Function to fetch GitHub from a link
-def get_github_file(repo, path, branch="main"):
-    url = f"https://api.github.com/repos/{repo}/contents/{path}?ref={branch}"
-    headers = {"Accept": "application/vnd.github.v3.raw"}
-    response = requests.get(url, headers=headers)
-
+def fetch_github_repo_contents(owner, repo, path=""):
+    # GitHub API URL
+    url = f"https://api.github.com/repos/{owner}/{repo}/contents/{path}"
+    
+    # Send a GET request to the GitHub API
+    response = requests.get(url)
+    
     if response.status_code == 200:
-        return response.text
+        contents = response.json()
+        files = []
+        
+        for item in contents:
+            if item['type'] == 'file':
+                # Get the content of each file
+                file_content = requests.get(item['download_url']).text
+                files.append({'path': item['path'], 'content': file_content})
+        
+        return files
     else:
-        print(f"Failed to fetch the file: {response.status_code}")
-        return None
+        raise Exception(f"Failed to fetch repository contents: {response.status_code}")
 
-# Example usage:
-repo = "username/repository"
-path = "README.md"
-file_content = get_github_file(repo, path)
 
-if file_content:
-    # Pass file_content to ChatGPT
-    pass
+
 
 
 
