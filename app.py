@@ -40,7 +40,17 @@ Session(app)
 - Display combined ChatGPT response so far
 '''
 
+@app.before_request
+def set_default_session_variable():
+    # Check if the session variable 'git_details' is set, if not set it to an empty string
+    if 'git_details' not in session:
+        session['git_details'] = ('','')  # Setting default value to an empty string
 
+# Context processor to inject session variables globally
+@app.context_processor
+def inject_session_variable():
+    # Add session variables to the context, like 'username'
+    return {'session_git_details': session.get('git_details', '')}
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -53,6 +63,8 @@ def git():
     if request.method == 'POST':
         session['git_link'] = request.form.get("file")
         print(session['git_link'])
+        session['git_details'] = extract_github_details(session['git_link'])
+
         return render_template("git.html")
 
     else:
@@ -75,8 +87,6 @@ def pitch():
 @app.route("/results", methods=['GET', 'POST'])
 def results():
     if request.method == 'POST':
-        session['git_details'] = extract_github_details(session['git_link'])
-
 
         # TODO: Abstract below into functions
         files = fetch_github_repo_contents(session['git_details'][0], session['git_details'][1])
