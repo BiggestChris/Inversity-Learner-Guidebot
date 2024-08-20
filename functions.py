@@ -47,3 +47,12 @@ def fetch_github_repo_contents(owner, repo, path=""):
         return files
     else:
         raise Exception(f"Failed to fetch repository contents: {response.status_code}")
+    
+
+# Function to read the text file and feed it into ChatGPT
+def read_text_file(file_path):
+    # Read the content of the text file
+    with open(file_path, 'r') as file:
+        file_content = file.read()
+
+    return file_content

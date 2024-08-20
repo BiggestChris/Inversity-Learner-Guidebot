@@ -8,14 +8,14 @@ load_dotenv()
 client = OpenAI()
 
 
-def comprehend_data(input_data):
+def comprehend_data(input_data, mark_scheme):
 
     completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                  {"role": "system", 
-                  "content": """This is meant to be a guide for people learning to code on their GitHub. Can you please read the file
-                  that you will be given and write a paragraph on general feedback for the user.
+                  "content": f"""This is meant to be a guide for people learning to code on their GitHub. Can you please read the file
+                  that you will be given and write a paragraph on general feedback for the user and assign it a mark. You can find a markscheme here {mark_scheme}
                   """},
                 {"role": "user",
                  "content": input_data }

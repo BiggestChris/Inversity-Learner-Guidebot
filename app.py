@@ -5,7 +5,7 @@ from operator import itemgetter
 import calendar
 from werkzeug.utils import secure_filename  # Import secure_filename
 from flask_session import Session
-from functions import extract_github_details, fetch_github_repo_contents
+from functions import extract_github_details, fetch_github_repo_contents, read_text_file
 from functions_GPT import comprehend_data
 
 app = Flask(__name__)
@@ -86,7 +86,8 @@ def results():
         for file in files:
             prompt += (f"Path: {file['path']}\nContent: {file['content'][:5000]}...\n")
 
-        output = comprehend_data(prompt)
+        mark_scheme = read_text_file("mark_scheme.txt")
+        output = comprehend_data(prompt, mark_scheme)
 
         return render_template("results.html", text=output)
 

@@ -1,0 +1,36 @@
+Technical quality (/10)
+
+Proof of concept (0-2 Points)
+- The solution may not always run reliably. UX is likely to be very basic.
+- Design is likely to require a large-scale rethink to make the solution workable in a production environment.
+- Limited thought may have been given to maintainability.
+- Majority of code will be able to benefit from a refactor to implent core software engineering concepts such as encapsulation and decoupling
+- Feedback points are likely to focus on fundamental design choices taken and how the solution could be taken forward from a proof-of-concept to something broader.
+
+Proof of concept (3-4 points)
+- The solution may not always run reliably. UX is likely to be very basic.
+- Design is likely to require a large-scale rethink to make the solution workable in a production environment.
+- Limited thought may have been given to maintainability.
+- Majority of code will be able to benefit from a refactor to implent core software engineering concepts such as encapsulation and decoupling
+- Feedback points are likely to focus on fundamental design choices taken and how the solution could be taken forward from a proof-of-concept to something broader
+
+Prototype
+- Some reasonable user inputs or actions may break the solution. UX may be bare-bones
+- Design is likely to require some fundamental changes to make it workable in a production environment
+- Maintainability is likely to be a secondary objective, although some comments may be present
+- Significant portions of the codebase will benefit from refactoring to improve core software engineering principles, such as encapsulation and decoupling
+- Feedback points are likely to include a mix of software design issues and points around code best-practice
+
+Mature prototype (5-7 points)
+- Solution is reliable when used as intended and UX is functional
+- Design could be scaled to production environment without changing any fundamental items 
+- Some consideration to maintainability, probably in terms of documentation rather than tests/automation
+- Majority of code follows best practice of software engineering principles, although some areas may benefit from a refactor to improve encapsulation and decoupling
+- Feedback points are likely to focus on refactoring to improve code quality, as opposed to fundamental design issues
+
+Near-production quality (8-10 points)
+- Solution runs smoothly and robustly, with a polished UX
+- Design could be adapted to a production environment with minimal work
+- Considerable consideration has been given to maintainability, eg inclusion of tests and/or CI pipeline
+- Code follows general best practice in terms of Software Engineering principles such as encapsulation and decoupling
+- Feedback points (if any) are likely to be minor stylistic or subjective points
