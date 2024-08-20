@@ -18,7 +18,7 @@ def extract_github_details(link):
             if link.find("/", start + len(owner) + 1) != -1:
                 raise ValueError
             else:
-                repo = link[(start + len(owner) + 1):]#link.find("/", start + len(owner) + 1)]
+                repo = link[(start + len(owner) + 1):link.find(".", start + len(owner) + 1)] # link.find("/", start + len(owner) + 1)]
             print('Owner: ', owner)
             print('Repo: ', repo)
             return (owner, repo)

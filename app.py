@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, url_for, redirect, session, flash
 import re, os
-from functions import search_director, get_director_details, get_company_details
 from itertools import groupby
 from operator import itemgetter
 import calendar
 from werkzeug.utils import secure_filename  # Import secure_filename
 from flask_session import Session
+from functions import extract_github_details, fetch_github_repo_contents
+from functions_GPT import comprehend_data
 
 app = Flask(__name__)
 
@@ -63,7 +64,9 @@ def pitch():
     if request.method == 'POST':
         session['pitch_link'] = request.form.get("file")
         print(session['pitch_link'])
-        return render_template("pitch.html")
+        text = """Whoops - this feature isn't actually built yet! Please watch this space. Feel free to use the GitHub upload
+        though which does work."""
+        return render_template("pitch.html", text=text)
 
     else:
 
@@ -71,7 +74,23 @@ def pitch():
     
 @app.route("/results", methods=['GET', 'POST'])
 def results():
-    if request.method == 'GET':
+    if request.method == 'POST':
+        session['git_details'] = extract_github_details(session['git_link'])
+
+
+        # TODO: Abstract below into functions
+        files = fetch_github_repo_contents(session['git_details'][0], session['git_details'][1])
+
+        prompt = ''
+
+        for file in files:
+            prompt += (f"Path: {file['path']}\nContent: {file['content'][:5000]}...\n")
+
+        output = comprehend_data(prompt)
+
+        return render_template("results.html", text=output)
+
+    else:
 
         return render_template("results.html")
 
