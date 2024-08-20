@@ -14,14 +14,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# For uploading
-app.config['UPLOAD_FOLDER'] = 'uploads/'  # Define where to store uploaded files
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Limit the maximum file size to 16MB
-app.secret_key = 'your_secret_key'  # Required for flash messages
-
-# Ensure the upload folder exists
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-
 
 '''
 1. Need an index main page with links
