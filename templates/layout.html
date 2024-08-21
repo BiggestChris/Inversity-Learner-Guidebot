@@ -13,10 +13,7 @@
         <link rel="stylesheet" href="static/site.css" />
 
         <!-- Favicon -->
-        <link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
-        <link rel="manifest" href="static/favicon/site.webmanifest">
+        <link rel="icon" href="../static/favicon/favicon.ico" />
 
         <title>{% block title %}{% endblock %}</title>
         
@@ -26,6 +23,7 @@
 
         <!-- From Bootstrap site -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <img id="logo" src="../static/images/full_logo.svg" width="50" height="50" class="d-inline-block align-top" alt="Inversity-logo"/>
             <a class="navbar-brand" href="#">Inversity Guidebot</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -33,17 +31,29 @@
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">Homepage<span class="sr-only">(current)</span></a>
+                    <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                        <a class="nav-link " href="/">Homepage
+                            {% if request.path == '/' %}<span class="sr-only">(current)</span>
+                            {% endif %}
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/git">GitHub upload</a>
+                    <li class="nav-item {% if request.path == '/git' %}active{% endif %}">
+                        <a class="nav-link" href="/git">GitHub upload
+                            {% if request.path == '/git' %}<span class="sr-only">(current)</span>
+                            {% endif %}
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pitch">Pitch upload</a>
+                    <li class="nav-item {% if request.path == '/pitch' %}active{% endif %}">
+                        <a class="nav-link" href="/pitch">Pitch upload
+                            {% if request.path == '/pitch' %}<span class="sr-only">(current)</span>
+                            {% endif %}
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/results">Results</a>
+                    <li class="nav-item {% if request.path == '/results' %}active{% endif %}">
+                        <a class="nav-link" href="/results">Results
+                            {% if request.path == '/results' %}<span class="sr-only">(current)</span>
+                            {% endif %}
+                        </a>
                     </li>
                 </ul>
             </div>

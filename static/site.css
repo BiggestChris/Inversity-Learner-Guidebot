@@ -23,3 +23,7 @@ a {
 .body-content {
     padding: 10px;
 }
+
+#logo {
+    margin-right: 20px;
+}
