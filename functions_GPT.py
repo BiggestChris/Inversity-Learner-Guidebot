@@ -3,6 +3,8 @@
 from openai import OpenAI
 from dotenv import load_dotenv
 
+# TODO: Add error-handling to the below ChatGPT API calls
+
 load_dotenv()
 
 client = OpenAI()
@@ -15,7 +17,9 @@ def comprehend_data(input_data, mark_scheme):
             messages=[
                  {"role": "system", 
                   "content": f"""This is meant to be a guide for people learning to code on their GitHub. Can you please read the file
-                  that you will be given and write a paragraph on general feedback for the user and assign it a mark. You can find a markscheme here {mark_scheme}
+                  that you will be given and compare to the mark scheme. You can find a markscheme here {mark_scheme}. Please then write
+                  a short paragraph with feedback and guidance on whether it can be submitted to Inversity (it DOES NOT need to be at production level
+                  to be ready to submit, just at proof of concept stage). Keep the total paragraph short, not more than 4 sentences.
                   """},
                 {"role": "user",
                  "content": input_data }

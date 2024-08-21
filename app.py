@@ -62,7 +62,6 @@ def index():
 def git():
     if request.method == 'POST':
         session['git_link'] = request.form.get("file")
-        print(session['git_link'])
         session['git_details'] = extract_github_details(session['git_link'])
 
         return render_template("git.html")
@@ -75,10 +74,9 @@ def git():
 def pitch():
     if request.method == 'POST':
         session['pitch_link'] = request.form.get("file")
-        print(session['pitch_link'])
-        text = """Whoops - this feature isn't actually built yet! Please watch this space. Feel free to use the GitHub upload
+        session['text'] = """Whoops - this feature isn't actually built yet! Please watch this space. Feel free to use the GitHub upload
         though which does work."""
-        return render_template("pitch.html", text=text)
+        return render_template("pitch.html", text=session['text'])
 
     else:
 
@@ -88,18 +86,18 @@ def pitch():
 def results():
     if request.method == 'POST':
 
-        # TODO: Abstract below into functions
-        files = fetch_github_repo_contents(session['git_details'][0], session['git_details'][1])
+        # TODO: Abstract below into a new function
+        session['files'] = fetch_github_repo_contents(session['git_details'][0], session['git_details'][1])
 
-        prompt = ''
+        session['prompt'] = ''
 
-        for file in files:
-            prompt += (f"Path: {file['path']}\nContent: {file['content'][:5000]}...\n")
+        for file in session['files']:
+            session['prompt'] += (f"Path: {file['path']}\nContent: {file['content'][:5000]}...\n")
 
-        mark_scheme = read_text_file("mark_scheme.txt")
-        output = comprehend_data(prompt, mark_scheme)
+        session['mark_scheme'] = read_text_file("mark_scheme.txt")
+        session['output'] = comprehend_data(session['prompt'], session['mark_scheme'])
 
-        return render_template("results.html", text=output)
+        return render_template("results.html", text=session['output'])
 
     else:
 
