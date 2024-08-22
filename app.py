@@ -55,9 +55,7 @@ def inject_session_variable():
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    if request.method == 'GET':
-
-        return render_template("index.html")
+    return render_template("index.html")
     
 @app.route("/git", methods=['GET', 'POST'])
 def git():
