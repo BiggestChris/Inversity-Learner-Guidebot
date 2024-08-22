@@ -91,25 +91,30 @@ def results():
         # Troubleshooting on Render
         print('Owner: ', session['git_details'][0])
         print('Repo: ', session['git_details'][1])
-        session['files'] = fetch_github_repo_contents(session['git_details'][0], session['git_details'][1])
-
-        session['prompt'] = ''
-
-        for file in session['files']:
-            session['prompt'] += (f"Path: {file['path']}\nContent: {file['content'][:5000]}...\n")
-
         try:
-            session['mark_scheme'] = read_text_file("mark_scheme.txt")
-        except ValueError:
-            print("Text file not found")
-            session['mark_scheme'] = 'Mark scheme failed to load, so use your best judgement to determine if this is a working MVP.'
+            session['files'] = fetch_github_repo_contents(session['git_details'][0], session['git_details'][1])
 
-        try:
-            session['output'] = comprehend_data(session['prompt'], session['mark_scheme'])
-        except RequestException:
-            session['output'] = 'Whoops! Something went wrong when feeding into ChatGPT, please try again later.'
+            session['prompt'] = ''
 
-        return render_template("results.html", text=session['output'])
+            for file in session['files']:
+                session['prompt'] += (f"Path: {file['path']}\nContent: {file['content'][:5000]}...\n")
+
+            try:
+                session['mark_scheme'] = read_text_file("mark_scheme.txt")
+            except ValueError:
+                print("Text file not found")
+                session['mark_scheme'] = 'Mark scheme failed to load, so use your best judgement to determine if this is a working MVP.'
+
+            try:
+                session['output'] = comprehend_data(session['prompt'], session['mark_scheme'])
+            except RequestException:
+                session['output'] = 'Whoops! Something went wrong when feeding into ChatGPT, please try again later.'
+
+            return render_template("results.html", text=session['output'])
+            
+        except Exception:
+            return render_template("results.html", text='Whoops! Something went wrong when trying to read your repo.')
+
 
     else:
 
