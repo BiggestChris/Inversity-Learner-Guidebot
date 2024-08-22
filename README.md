@@ -25,3 +25,5 @@ test_github_api.py - this is a file just to use for running a test of pulling gi
 /templates - this folder contains the page templates for flask
 
 /static - this contains static styling data, primarily Inversity favicon and logo and the site CSS (site uses Bootstrap by default)
+
+NOTES: The app seems to work fine when run locally, but deployment to Render seems to create issues with the API call to GitHub. Due to time constraints I've not been able to resolve this (deployment here: https://inversity-learner-guidebot.onrender.com/).

@@ -77,6 +77,7 @@ def pitch():
         session['pitch_link'] = request.form.get("file")
         session['text'] = """Whoops - this feature isn't actually built yet! Please watch this space. Feel free to use the GitHub upload
         though which does work."""
+
         return render_template("pitch.html", text=session['text'])
 
     else:
