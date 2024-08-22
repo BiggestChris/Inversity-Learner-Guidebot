@@ -88,6 +88,9 @@ def results():
     if request.method == 'POST':
 
         # TODO: Abstract below into a new function
+        # Troubleshooting on Render
+        print('Owner: ', session['git_details'][0])
+        print('Repo: ', session['git_details'][1])
         session['files'] = fetch_github_repo_contents(session['git_details'][0], session['git_details'][1])
 
         session['prompt'] = ''
