@@ -30,11 +30,21 @@ def extract_github_details(link):
 
 # TODO: Add error handling to GitHub API Call
 def fetch_github_repo_contents(owner, repo, path=""):
+
+    # Access the GitHub token from the environment
+    GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+
+    # Set up headers with Authorization token
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
     # GitHub API URL
     url = f"https://api.github.com/repos/{owner}/{repo}/contents/{path}"
     
     # Send a GET request to the GitHub API
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
     
     if response.status_code == 200:
         contents = response.json()
