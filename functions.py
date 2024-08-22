@@ -25,9 +25,8 @@ def extract_github_details(link):
             print('Owner: ', owner)
             print('Repo: ', repo)
             return (owner, repo)
-    except ValueError:
-        print("Not a GitHub link")
-        return
+    except:
+        raise ValueError
 
 # TODO: Add error handling to GitHub API Call
 def fetch_github_repo_contents(owner, repo, path=""):
@@ -48,14 +47,19 @@ def fetch_github_repo_contents(owner, repo, path=""):
                 files.append({'path': item['path'], 'content': file_content})
         
         return files
+    
     else:
         raise Exception(f"Failed to fetch repository contents: {response.status_code}")
     
 # TODO: Add error handling to below in case file path doesn't exist etc.
 # Function to read the text file and feed it into ChatGPT
 def read_text_file(file_path):
-    # Read the content of the text file
-    with open(file_path, 'r') as file:
-        file_content = file.read()
+    try:
+        # Read the content of the text file
+        with open(file_path, 'r') as file:
+            file_content = file.read()
 
-    return file_content
+        return file_content
+    
+    except:
+        raise ValueError

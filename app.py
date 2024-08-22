@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename  # Import secure_filename
 from flask_session import Session
 from functions import extract_github_details, fetch_github_repo_contents, read_text_file
 from functions_GPT import comprehend_data
+from requests.exceptions import RequestException
 
 app = Flask(__name__)
 
@@ -62,9 +63,11 @@ def index():
 def git():
     if request.method == 'POST':
         session['git_link'] = request.form.get("file")
-        session['git_details'] = extract_github_details(session['git_link'])
-
-        return render_template("git.html")
+        try:
+            session['git_details'] = extract_github_details(session['git_link'])
+            return render_template("git.html", text="GitHub read successfully")
+        except ValueError:
+            return render_template("git.html", text="Invalid GitHub link")
 
     else:
 
@@ -94,8 +97,16 @@ def results():
         for file in session['files']:
             session['prompt'] += (f"Path: {file['path']}\nContent: {file['content'][:5000]}...\n")
 
-        session['mark_scheme'] = read_text_file("mark_scheme.txt")
-        session['output'] = comprehend_data(session['prompt'], session['mark_scheme'])
+        try:
+            session['mark_scheme'] = read_text_file("mark_scheme.txt")
+        except ValueError:
+            print("Text file not found")
+            session['mark_scheme'] = 'Mark scheme failed to load, so use your best judgement to determine if this is a working MVP.'
+
+        try:
+            session['output'] = comprehend_data(session['prompt'], session['mark_scheme'])
+        except RequestException:
+            session['output'] = 'Whoops! Something went wrong when feeding into ChatGPT, please try again later.'
 
         return render_template("results.html", text=session['output'])
 

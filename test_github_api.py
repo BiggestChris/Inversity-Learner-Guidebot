@@ -1,5 +1,5 @@
 from functions import fetch_github_repo_contents
-from functionsGPT import comprehend_data
+from functions_GPT import comprehend_data
 
 # Example usage
 owner = 'BiggestChris'
