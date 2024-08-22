@@ -26,4 +26,4 @@ test_github_api.py - this is a file just to use for running a test of pulling gi
 
 /static - this contains static styling data, primarily Inversity favicon and logo and the site CSS (site uses Bootstrap by default)
 
-NOTES: The app seems to work fine when run locally, but deployment to Render seems to create issues with the API call to GitHub. Due to time constraints I've not been able to resolve this (deployment here: https://inversity-learner-guidebot.onrender.com/).
+NOTES: The deployment to Render necessitated creating a GitHub read-only token on User repos (deployment here: https://inversity-learner-guidebot.onrender.com/). Locally, the token wasn't needed but once on render it rate limits all API calls from render without a token, hence the code was updated to reflect this.
