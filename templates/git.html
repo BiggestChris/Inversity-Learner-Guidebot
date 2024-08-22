@@ -5,12 +5,21 @@
 {% block content %}
 
     <h1>Upload a GitHub Repo</h1>
+
+    <p>
+        Please type in your GitHub repo URL (make sure it's set to public!). It should be in the format 
+        'https://github.com/BiggestChris/Companies-House-Unlock.git' or 'https://github.com/BiggestChris/Companies-House-Unlock', 
+        it will reject the link otherwise (please don't include any trailing /'s).
+    </p>
+
     <form method="POST" action="/git" enctype="multipart/form-data">
         <input type="text" name="file">
         <input type="submit" value="Upload">
     </form>
 
-    <p>{{ text }}</p>
+    <em>
+        {{ text }}
+    </em>
 
     <!-- Flash messages section
     {% with messages = get_flashed_messages(with_categories=true) %}

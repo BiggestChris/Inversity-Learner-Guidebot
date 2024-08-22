@@ -5,14 +5,20 @@
 {% block content %}
 
     <h1>Upload a YouTube link</h1>
+
+    <p>
+        Please type in your YouTube pitch URL (make sure it's set to public or unlisted). It should be in this format 
+        'https://youtu.be/CZkafTg99mQ'.
+    </p>
+
     <form method="POST" action="/pitch" enctype="multipart/form-data">
         <input type="text" name="file">
         <input type="submit" value="Upload">
     </form>
 
-    <p>
+    <em>
         {{ text }}
-    </p>
+    </em>
 
 
 {% endblock %}
